@@ -4,7 +4,7 @@ close all;
 
 %pe = pyenv(Version="C:\Users\espott\AppData\Local\Programs\Python\Python311\pythonw.exe");
 
-DIST_THRESHOLD = 600;
+DIST_THRESHOLD = 200;
 ARROW_SCALE = 200;
 DT = 0.4;
 
@@ -42,7 +42,7 @@ while true
     [x, y, theta, car] = car.odom();
 
     if y > 3000 || y < -3000 || x > 2000 || x < -2000
-        car.dr_client.stop_car()
+        car.stop_car()
         disp("out of bounds");
         break
     end
