@@ -7,17 +7,47 @@ close all;
 DIST_THRESHOLD = 200;
 ARROW_SCALE = 200;
 DT = 0.4;
+% 
+% % reference plan (imported from plan.m --> plan.mat)
+% r_plan = matfile('plan_20_circle_mm.mat').data;
+% % r_plan = matfile('plan_60_sine_2.mat').data;
+% %r_plan = [300; 400]; % use this to go to a point
 
-% reference plan (imported from plan.m --> plan.mat)
-r_plan = matfile('plan_20_circle_mm.mat').data;
-% r_plan = matfile('plan_60_sine_2.mat').data;
-%r_plan = [300; 400]; % use this to go to a point
+DIY_PLOT = false;
+
+if ~DIY_PLOT
+    % reference plan (imported from plan.m --> plan.mat)
+    r_plan = matfile('plan_20_circle_mm.mat').data;
+    % r_plan = matfile('plan/plan_60_circle.mat').data;
+    % r_plan = [0; 0];
+else
+    figure(1)
+    clf
+    axh = axes;
+    hold(axh, 'on')
+    xlim([-1000,1000])
+    ylim([-1000,1000])
+    grid on
+    xyTemp = [0,0];
+    xy=xyTemp;
+    k=0;
+    while ~isempty(xyTemp)
+        xyTemp = ginput(1);
+        if ~isempty(xyTemp)
+            plot(axh, xyTemp(1), xyTemp(2), 'bo', 'MarkerSize', 6, 'MarkerFaceColor', 'b');
+            k=k+1;
+            xy(k,:)=xyTemp;
+        end
+    end
+    
+    r_plan = xy';
+end
 
 %%% CHANGE CODE HERE
 % car = Model();
 % car = OsoyooV2();
 % car = Deepracer();
-car = Turtlebot();
+car = TBmouse();
 % controller = PID();
 % controller = Basic_Control(car.max_v, car.max_gamma); % use this to sanity check car build
 % controller = PurePursuit_Control(r_plan', 100, car.max_v, 4*car.max_gamma);

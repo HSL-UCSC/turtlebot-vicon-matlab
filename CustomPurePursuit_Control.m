@@ -14,6 +14,7 @@ classdef CustomPurePursuit_Control
         reached_path = false;
         target_point = [];
         dist_threshold;
+        
     end
     
     methods

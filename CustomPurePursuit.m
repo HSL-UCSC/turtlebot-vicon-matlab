@@ -2,7 +2,7 @@ classdef CustomPurePursuit < handle
     properties
         LookaheadDistanceBase = 1.0; % Base lookahead distance, remains constant
         LookaheadSpeedGain = 0.1; % Gain for speed-dependent lookahead adjustment
-        MaxAngularVelocity = 1.0; % Maximum angular velocity
+        MaxAngularVelocity = pi/4; % Maximum angular velocity
         DesiredLinearVelocity = 1.0; % Desired linear velocity
         MaxSteeringAngle = 1.0;
         Waypoints = []; % Original waypoints provided by the user
@@ -76,16 +76,16 @@ classdef CustomPurePursuit < handle
             
             angleToGoal = atan2(lookAheadPoint(2) - currentPose(2), lookAheadPoint(1) - currentPose(1));
             steeringAngle = angleToGoal - currentPose(3);
-            steeringAngle = atan2(sin(steeringAngle), cos(steeringAngle));
+            steeringAngle = atan2(sin(steeringAngle), cos(steeringAngle))
 
-            steeringAngle = clip(steeringAngle, -obj.MaxSteeringAngle, obj.MaxSteeringAngle);
+            steeringAngle = clip(steeringAngle, -obj.MaxSteeringAngle, obj.MaxSteeringAngle)
 
 %             disp(angleToGoal)
 %             disp(steeringAngle)
             
 %             omega = (2 * obj.DesiredLinearVelocity / obj.DynamicLookaheadDistance) * sin(steeringAngle);
 %             omega = max(min(omega, obj.MaxAngularVelocity), -obj.MaxAngularVelocity);
-            v = obj.DesiredLinearVelocity * (1 - 0.9 * steeringAngle / obj.MaxSteeringAngle);
+            v = obj.DesiredLinearVelocity * (1 - 0.9 * abs(steeringAngle) / obj.MaxSteeringAngle);
             omega = steeringAngle;
             [v omega obj.DesiredLinearVelocity obj.MaxSteeringAngle]
         end
