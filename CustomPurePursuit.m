@@ -2,7 +2,6 @@ classdef CustomPurePursuit < handle
     properties
         LookaheadDistanceBase = 1.0; % Base lookahead distance, remains constant
         LookaheadSpeedGain = 0.1; % Gain for speed-dependent lookahead adjustment
-        MaxAngularVelocity = pi/4; % Maximum angular velocity
         DesiredLinearVelocity = 1.0; % Desired linear velocity
         MaxSteeringAngle = 1.0;
         Waypoints = []; % Original waypoints provided by the user
@@ -22,8 +21,6 @@ classdef CustomPurePursuit < handle
                     switch lower(propName)
                         case 'lookaheaddistance'
                             obj.LookaheadDistanceBase = propValue;
-                        case 'maxangularvelocity'
-                            obj.MaxAngularVelocity = propValue;
                         case 'desiredlinearvelocity'
                             obj.DesiredLinearVelocity = propValue;
 %                         case 'waypoints'
@@ -62,9 +59,9 @@ classdef CustomPurePursuit < handle
             obj.Speed = currentSpeed;
             obj = obj.adjustLookaheadDistance(); % Adjusts and updates DynamicLookaheadDistance based on current speed
             [lookAheadPoint, found, obj] = obj.findLookAheadPoint(currentPose);
-            plot(lookAheadPoint(1), lookAheadPoint(2), '+', 'Color', 'g', 'MarkerSize', 20);
-            plot(currentPose(1) + obj.DynamicLookaheadDistance * cos(linspace(0, 2*pi)), currentPose(2) + obj.DynamicLookaheadDistance * sin(linspace(0, 2*pi)));
-            plot(obj.InterpolatedWaypoints(:,1), obj.InterpolatedWaypoints(:,2))
+            % plot(lookAheadPoint(1), lookAheadPoint(2), '+', 'Color', 'g', 'MarkerSize', 20);
+            % plot(currentPose(1) + obj.DynamicLookaheadDistance * cos(linspace(0, 2*pi)), currentPose(2) + obj.DynamicLookaheadDistance * sin(linspace(0, 2*pi)));
+            % plot(obj.InterpolatedWaypoints(:,1), obj.InterpolatedWaypoints(:,2))
 %             disp("pt")
 %             disp(lookAheadPoint)
             if ~found
@@ -76,9 +73,9 @@ classdef CustomPurePursuit < handle
             
             angleToGoal = atan2(lookAheadPoint(2) - currentPose(2), lookAheadPoint(1) - currentPose(1));
             steeringAngle = angleToGoal - currentPose(3);
-            steeringAngle = atan2(sin(steeringAngle), cos(steeringAngle))
+            steeringAngle = atan2(sin(steeringAngle), cos(steeringAngle));
 
-            steeringAngle = clip(steeringAngle, -obj.MaxSteeringAngle, obj.MaxSteeringAngle)
+            steeringAngle = clip(steeringAngle, -obj.MaxSteeringAngle, obj.MaxSteeringAngle);
 
 %             disp(angleToGoal)
 %             disp(steeringAngle)
@@ -87,7 +84,7 @@ classdef CustomPurePursuit < handle
 %             omega = max(min(omega, obj.MaxAngularVelocity), -obj.MaxAngularVelocity);
             v = obj.DesiredLinearVelocity * (1 - 0.9 * abs(steeringAngle) / obj.MaxSteeringAngle);
             omega = steeringAngle;
-            [v omega obj.DesiredLinearVelocity obj.MaxSteeringAngle]
+            % [v omega obj.DesiredLinearVelocity obj.MaxSteeringAngle]
         end
         
         function obj = adjustLookaheadDistance(obj)
@@ -115,7 +112,7 @@ classdef CustomPurePursuit < handle
                     % segmentEnd = obj.InterpolatedWaypoints(i + 1, :);
                     % 
                     % [point, isOnSegment] = obj.projectLookAheadPoint(currentPose, segmentStart, segmentEnd);
-                plot(point(1), point(2), 'x', 'Color', 'r', 'MarkerSize', 10);
+                % plot(point(1), point(2), 'x', 'Color', 'r', 'MarkerSize', 10);
                 % end
 
 %                 if isOnSegment

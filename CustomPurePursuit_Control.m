@@ -18,10 +18,9 @@ classdef CustomPurePursuit_Control
     end
     
     methods
-        function obj = CustomPurePursuit_Control(dist_threshold, max_v, max_gamma, max_angular_v)
+        function obj = CustomPurePursuit_Control(dist_threshold, max_v, max_gamma)
             % Initialize the custom pure pursuit controller with the desired parameters
             obj.controller = CustomPurePursuit('DesiredLinearVelocity', max_v, ...
-                                               'MaxAngularVelocity', max_angular_v, ...
                                                'MaxSteeringAngle', max_gamma, ...
                                                'LookaheadDistance', dist_threshold);
             obj.dist_threshold = dist_threshold;

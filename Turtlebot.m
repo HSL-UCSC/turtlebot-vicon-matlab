@@ -1,12 +1,11 @@
-classdef Turtlebot
+classdef turtlebot
     properties
-        Car_ID = "Object1";
+        Car_ID;
         vicon_client;
-        dr_client;
         
         udp = udpport; % intializing udp protocol
         vm_ip = '128.114.59.174';
-        vm_port = 50804;
+        vm_port;
 
         % x = 0;
         % y = 0;
@@ -43,10 +42,14 @@ classdef Turtlebot
         reverse_driving = false;
     end
     methods
-        function obj = Turtlebot()
-            obj.vicon_client = Vicon.Client();
-            obj.vicon_client.destroy();
-            obj.vicon_client.initialize();
+        function obj = turtlebot(vicon_client, vicon_name, port)
+            % obj.vicon_client = Vicon.Client();
+            % obj.vicon_client.destroy();
+            % obj.vicon_client.initialize();
+
+            obj.vicon_client = vicon_client;
+            obj.Car_ID = vicon_name;
+            obj.vm_port = port;
 
             % obj.node_1=ros2node("node_1");
             % obj.pub=ros2publisher(obj.node_1,"/erlich/cmd_vel","geometry_msgs/Twist");
@@ -63,15 +66,15 @@ classdef Turtlebot
             v = clip(v, obj.min_v, obj.max_v);
             gamma = clip(gamma, obj.min_gamma, obj.max_gamma);
 
-            obj.v = 2*v;
-            obj.gamma = (gamma-1)*4;
+            obj.v = v;
+            obj.gamma = gamma;
 
-            if obj.gamma>0.5
-                obj.v=0;
-            end
-            if obj.gamma<-0.5
-                obj.v=0
-            end
+            % if obj.gamma>0.5
+            %     obj.v=0;
+            % end
+            % if obj.gamma<-0.5
+            %     obj.v=0;
+            % end
 
             disp([obj.v, obj.gamma])
 
@@ -89,7 +92,7 @@ classdef Turtlebot
             obj.x = double(pose.translation{1});
             obj.y = double(pose.translation{2});
 
-            t = double(pose.rotation{3});
+            t = double(pose.rotation{3}) + pi/2;
             % if obj.reverse_driving
             %     t = t + pi;
             % end
