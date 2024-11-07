@@ -20,8 +20,8 @@ BACHMAN_PORT = 50805;
 % car = Model();
 % car = OsoyooV2();
 % car = Deepracer();
-car = turtlebot(VICON_CLIENT, ERLICH_VICON, ERLICH_PORT);
-% car = turtlebot(VICON_CLIENT, BACHMAN_VICON, BACHMAN_PORT);
+% car = turtlebot(VICON_CLIENT, ERLICH_VICON, ERLICH_PORT);
+car = turtlebot(VICON_CLIENT, BACHMAN_VICON, BACHMAN_PORT);
 % controller = PID();
 % controller = Basic_Control(car.max_v, car.max_gamma); % use this to sanity check car build
 % controller = PurePursuit_Control(r_plan', 100, car.max_v, 4*car.max_gamma);
@@ -44,7 +44,7 @@ while true
     
     [x, y, theta, car] = car.odom();
 
-    if y > 3000 || y < -3000 || x > 2000 || x < -2000
+    if y > 2400 || y < -2700 || x > 1900 || x < -2000
         car.stop_car()
         disp("out of bounds");
         break

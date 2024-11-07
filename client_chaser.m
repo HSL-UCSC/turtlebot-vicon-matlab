@@ -2,7 +2,7 @@ clear;
 clc;
 close all;
 
-DIST_THRESHOLD = 200;
+DIST_THRESHOLD = 400;
 ARROW_SCALE = 400;
 DT = 0.4;
 
@@ -21,7 +21,7 @@ cat = turtlebot(VICON_CLIENT, BACHMAN_VICON, BACHMAN_PORT);
 % controller = PID();
 % controller = Basic_Control(car.max_v, car.max_gamma); % use this to sanity check car build
 % controller = PurePursuit_Control(r_plan', 100, car.max_v, 4*car.max_gamma);
-mouse_controller = CustomPurePursuit_Control(DIST_THRESHOLD, mouse.max_v * 0.5, pi/4);
+mouse_controller = CustomPurePursuit_Control(DIST_THRESHOLD, mouse.max_v, pi/4);
 cat_controller = CustomPurePursuit_Control(DIST_THRESHOLD, cat.max_v, pi/4);
 
 %%% END CODE HERE
@@ -43,7 +43,7 @@ while true
     [m_x, m_y, m_theta, mouse] = mouse.odom();
     [c_x, c_y, c_theta, cat] = cat.odom();
 
-    if (m_y > 3000 || m_y < -3000 || m_x > 2000 || m_x < -2000) || (c_y > 3000 || c_y < -3000 || c_x > 2000 || c_x < -2000)
+    if (m_y > 2400 || m_y < -2700 || m_x > 1900 || m_x < -2000) || (c_y > 2400 || c_y < -2700 || c_x > 1900 || c_x < -2000)
         mouse.stop_car();
         cat.stop_car();
         disp("out of bounds");
@@ -59,7 +59,7 @@ while true
     end
 
     % [c_done, cat_controller] = cat_controller.done();
-    if abs(norm([c_x - m_x; c_y - m_y])) < DIST_THRESHOLD*2
+    if abs(norm([c_x - m_x; c_y - m_y])) < DIST_THRESHOLD
         disp("caught");
         break
     end

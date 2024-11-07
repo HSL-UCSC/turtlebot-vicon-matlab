@@ -92,7 +92,7 @@ classdef turtlebot
             obj.x = double(pose.translation{1});
             obj.y = double(pose.translation{2});
 
-            t = double(pose.rotation{3}) + pi/2;
+            t = double(pose.rotation{3});
             % if obj.reverse_driving
             %     t = t + pi;
             % end
