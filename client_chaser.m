@@ -59,7 +59,7 @@ while true
     end
 
     % [c_done, cat_controller] = cat_controller.done();
-    if abs(norm([c_x - m_x; c_y - m_y])) < DIST_THRESHOLD
+    if abs(norm([c_x - m_x; c_y - m_y])) < DIST_THRESHOLD * 1.5
         disp("caught");
         break
     end
